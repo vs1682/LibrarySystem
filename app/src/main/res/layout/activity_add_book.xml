@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etBookName"
+        android:hint="book name"
+        android:layout_centerHorizontal="true"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etBookCategory"
+        android:hint="book category"
+        android:layout_below="@id/etBookName"
+        android:layout_centerHorizontal="true"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etBookAuthor"
+        android:hint="book author"
+        android:layout_below="@id/etBookCategory"
+        android:layout_centerHorizontal="true"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etBookPrice"
+        android:hint="book price"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/etBookAuthor"
+        android:layout_centerHorizontal="true"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etBookQuantity"
+        android:hint="quantity"
+        android:inputType="number"
+        android:layout_below="@id/etBookPrice"
+        android:layout_centerHorizontal="true"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/etBookDescription"
+        android:hint="book description"
+        android:layout_below="@id/etBookQuantity"
+        android:layout_centerHorizontal="true"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnAddBook"
+        android:text="Add book"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

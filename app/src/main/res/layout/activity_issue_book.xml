@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etIssueBookID"
+        android:layout_centerInParent="true"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etIssueToMemberID"
+        android:hint="memberID"
+        android:layout_below="@id/etIssueBookID"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnIssueBook"
+        android:text="issue"
+        android:layout_below="@id/etIssueToMemberID"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnReadIssueRecord"
+        android:text="read record"
+        android:layout_below="@id/btnIssueBook"/>
+
+</RelativeLayout>
