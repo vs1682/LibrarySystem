@@ -76,27 +76,12 @@ public class NavDrawerActivity extends AppCompatActivity {
                                                                    e.printStackTrace();
                                                                }
                                                                break;
-                                                           case 2:
-                                                               if (ExportImportDB.isBackupPresent()) {
-                                                                   Toast.makeText(getBaseContext(), "importing", Toast.LENGTH_SHORT).show();
-                                                                   try {
-                                                                       int i = ExportImportDB.importDB(getApplicationContext());
-                                                                       if (i == 1)
-                                                                           Toast.makeText(getBaseContext(), "import successful!!", Toast.LENGTH_SHORT).show();
-                                                                       else
-                                                                           Toast.makeText(getBaseContext(), "import unsuccessful!!", Toast.LENGTH_SHORT).show();
-                                                                   } catch (IOException e) {
-                                                                       e.printStackTrace();
-                                                                   }
-                                                               } else
-                                                                   Toast.makeText(getBaseContext(), "Backup not present", Toast.LENGTH_SHORT).show();
-                                                               break;
-                                                           case 3:
+                                                           /*case 3:
                                                                if (ExportImportDB.isDbPresent())
                                                                    Toast.makeText(getBaseContext(), "present", Toast.LENGTH_SHORT).show();
                                                                else
                                                                    Toast.makeText(getBaseContext(), "not present", Toast.LENGTH_SHORT).show();
-                                                               break;
+                                                               break;*/
                                                            case 4:
                                                                //CRUDBook.getInstance(getApplicationContext()).getBookDetails();
                                                                Intent intentHome = new Intent(NavDrawerActivity.this, HomePageActivity.class);

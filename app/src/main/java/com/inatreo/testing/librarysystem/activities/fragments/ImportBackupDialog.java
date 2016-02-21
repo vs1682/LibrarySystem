@@ -16,12 +16,14 @@ public class ImportBackupDialog extends DialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        return (dialog.setMessage("Do you want to apply?")
+        return (dialog.setMessage("Do you want to import one" +
+                "?")
                     .setTitle("Backups available")
                     .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(getActivity(), "yes is working", Toast.LENGTH_SHORT).show();
+                            new SelectBackupDialog().show(getFragmentManager(), "selectBackup");
                         }
                     })
                     .setNegativeButton("no", new DialogInterface.OnClickListener() {
