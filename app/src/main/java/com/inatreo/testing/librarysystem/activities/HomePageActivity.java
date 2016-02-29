@@ -23,13 +23,17 @@ import java.io.IOException;
  * Created by vishal on 1/26/2016.
  */
 public class HomePageActivity extends NavDrawerActivity implements SelectBackupInterface{
+  
+    private static final String SHOWING_IMPORT_BACKUP_DIALOG_FOR_FIRST_TIME = "showingImportBackupDialogForFirstTime";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+      
         final EditText etSearch = (EditText)findViewById(R.id.etSearch);
         Button btnUser = (Button) findViewById(R.id.btnUser);
         Button btnBook = (Button) findViewById(R.id.btnBook);
+      
         btnUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +53,10 @@ public class HomePageActivity extends NavDrawerActivity implements SelectBackupI
             }
         });
 
-        new ImportBackupDialog().show(getFragmentManager(), "importDialog");
+        if(!PreferenceManager.getInstance(getApplicationContext()).contains(SHOWING_IMPORT_BACKUP_DIALOG_FOR_FIRST_TIME)){
+          new ImportBackupDialog().show(getFragmentManager(), "importDialog");
+          PreferenceManager.getInstance(getApplicationContext()).putBoolean(SHOWING_IMPORT_BACKUP_DIALOG_FOR_FIRST_TIME, true);
+        }
     }
 
     @Override
