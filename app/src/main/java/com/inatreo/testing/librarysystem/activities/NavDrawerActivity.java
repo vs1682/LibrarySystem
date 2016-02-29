@@ -55,7 +55,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withName("EXPORT BACKUP").withIdentifier(1),
                         new PrimaryDrawerItem().withName("IMPORT BACKUP").withIdentifier(2),
                         new PrimaryDrawerItem().withName("CHECK IF IMPORTED").withIdentifier(3),
-                        new PrimaryDrawerItem().withName("SEARCH").withIdentifier(4),
+                        new PrimaryDrawerItem().withName("OLDEST").withIdentifier(4),
                         new PrimaryDrawerItem().withName("ADD MEMBER").withIdentifier(5),
                         new PrimaryDrawerItem().withName("ADD BOOK").withIdentifier(6),
                         new PrimaryDrawerItem().withName("LOG OUT")
@@ -84,8 +84,9 @@ public class NavDrawerActivity extends AppCompatActivity {
                                                                break;*/
                                                            case 4:
                                                                //CRUDBook.getInstance(getApplicationContext()).getBookDetails();
-                                                               Intent intentHome = new Intent(NavDrawerActivity.this, HomePageActivity.class);
-                                                               startActivity(intentHome);
+                                                               /*Intent intentHome = new Intent(NavDrawerActivity.this, HomePageActivity.class);
+                                                               startActivity(intentHome);*/
+                                                               ExportImportDB.deleteOldestFile();
                                                                break;
                                                            case 5:
                                                                Intent intent = new Intent(NavDrawerActivity.this, AddMemberActivity.class);

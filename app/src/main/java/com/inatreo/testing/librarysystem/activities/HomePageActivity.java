@@ -13,6 +13,7 @@ import com.inatreo.testing.librarysystem.activities.fragments.ImportBackupDialog
 import com.inatreo.testing.librarysystem.activities.fragments.SelectBackupDialog;
 import com.inatreo.testing.librarysystem.database.CRUDBook;
 import com.inatreo.testing.librarysystem.database.CRUDMember;
+import com.inatreo.testing.librarysystem.interfaces.SelectBackupInterface;
 import com.inatreo.testing.librarysystem.models.Book;
 import com.inatreo.testing.librarysystem.utils.ExportImportDB;
 
@@ -21,7 +22,7 @@ import java.io.IOException;
 /**
  * Created by vishal on 1/26/2016.
  */
-public class HomePageActivity extends NavDrawerActivity implements SelectBackupDialog.SelectBackupInterface {
+public class HomePageActivity extends NavDrawerActivity implements SelectBackupInterface{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,17 +33,19 @@ public class HomePageActivity extends NavDrawerActivity implements SelectBackupD
         btnUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CRUDMember.getInstance(getApplicationContext()).getMemberDetails(Integer.parseInt(etSearch.getText().toString()));
+                CRUDMember.getInstance(getApplicationContext()).getMemberDetails((etSearch.getText().toString()));
             }
         });
         btnBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (CRUDBook.getInstance(getApplicationContext()).isBookPresent(etSearch.getText().toString())){
-                    Intent intent = new Intent(HomePageActivity.this, BookDetailsActivity.class);
+                if (CRUDBook.getInstance(getApplicationContext()).isBookPresent(etSearch.getText().toString())) {
+                    Log.v("-HPA-","it's working");
+                    Intent intent = new Intent(getBaseContext(), BookDetailsActivity.class);
                     intent.putExtra("BOOK_ID", etSearch.getText().toString());
                     startActivity(intent);
-                }else Toast.makeText(getBaseContext(), "no book with this ID", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getBaseContext(), "no book with this ID", Toast.LENGTH_SHORT).show();
             }
         });
 

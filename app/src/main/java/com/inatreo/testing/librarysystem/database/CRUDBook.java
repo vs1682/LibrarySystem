@@ -55,19 +55,22 @@ public class CRUDBook{
         }).start();
     }
 
+    //book id starts from 335001
     public int getBookId(){
         String query = "select * from " + TABLE_BOOKS;
         Cursor cursor = DBManager.getDBInstance(context).rawQuery(query, null);
         if (cursor.getCount() == 0){
             Log.v("-DBM-", "book id: " + String.valueOf(335001));
+            cursor.close();
             return (335000 + 1);
         }
         else{
             Log.v("-DBM-","book id: " + String.valueOf(335001+cursor.getCount()));
+            cursor.close();
             return (335000 + cursor.getCount() + 1);
         }
     }
-    //book id starts from 335001
+
     public Book getBookDetails(String bookID ){
         Book book = new Book();
         String query = "select * from " + TABLE_BOOKS + " where " + BOOK_ID + " = " + bookID;
@@ -121,8 +124,11 @@ public class CRUDBook{
         Cursor cursor = db.query(TABLE_BOOKS, columns, selction, selectionArgs, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()){
+            Log.v("-CB-","it's happening");
             size++;
+            cursor.moveToNext();
         }
+        cursor.close();
         if (size == 1)
             return true;
         else return false;

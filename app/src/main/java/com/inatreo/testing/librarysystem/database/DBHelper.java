@@ -31,8 +31,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_ADMIN_QUERY = "create table admins( admin_id INTEGER PRIMARY KEY, "+
             " first_name TEXT, last_name TEXT, mobile_no TEXT, username TEXT, password TEXT, master_or_admin TEXT)";
 
-    private static final String CREATE_TABLE_MEMBER_QUERY = "create table members( member_id INTEGER PRIMARY KEY, "+
-            "full_name TEXT, father_name TEXT, age INTEGER, mobile_no TEXT, level TEXT, address TEXT)";
+    private static final String CREATE_TABLE_MEMBER_QUERY = "create table members( mobile_no TEXT PRIMARY KEY, "+
+            "full_name TEXT, father_name TEXT, age INTEGER, level TEXT, address TEXT)";
 
     private static final String CREATE_TABLE_ISSUERECORD_QUERY = "create table issue_record( issue_id INTEGER PRIMARY KEY, "+
             "book_id TEXT, member_id TEXT, issue_date datetime default current_date)";

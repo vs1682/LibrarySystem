@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import com.inatreo.testing.librarysystem.interfaces.SelectBackupInterface;
 import com.inatreo.testing.librarysystem.utils.ExportImportDB;
 
 import java.io.IOException;
@@ -17,10 +18,6 @@ import java.io.IOException;
 public class SelectBackupDialog extends DialogFragment {
     String[] backupFiles;
     String selectedFile;
-
-    public interface SelectBackupInterface{
-        public void selectedFile(String file);
-    }
 
     SelectBackupInterface selectBackupInterface;
 

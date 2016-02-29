@@ -19,7 +19,6 @@ public class CRUDMember {
     private static CRUDMember crudMember;
 
     private static final String TABLE_MEMBER = "members";
-    private static final String MEMBER_ID = "member_id";
     private static final String MEMBER_FULLNAME = "full_name";
     private static final String MEMBER_FATHER_NAME = "father_name";
     private static final String MEMBER_AGE = "age";
@@ -43,7 +42,6 @@ public class CRUDMember {
             public void run() {
                 SQLiteDatabase db = DBManager.getDBInstance(context);
                 ContentValues cv = new ContentValues();
-                cv.put(MEMBER_ID, member.getMemberID());
                 cv.put(MEMBER_FULLNAME, member.getFullName());
                 cv.put(MEMBER_FATHER_NAME, member.getFatherName());
                 cv.put(MEMBER_AGE, member.getAge());
@@ -55,14 +53,13 @@ public class CRUDMember {
         }).start();
     }
 
-    public Member getMemberDetails(int memberID){
+    public Member getMemberDetails(String mobileNo){
         Member member = new Member();
-        String query = "select * from " + TABLE_MEMBER + " where " + MEMBER_ID + " = " + memberID;
+        String query = "select * from " + TABLE_MEMBER + " where " + MEMBER_MOBILE + " = " + mobileNo;
         SQLiteDatabase db = DBManager.getDBInstance(context);
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()){
-            member.setMemberID(cursor.getString(cursor.getColumnIndex(MEMBER_ID)));
             member.setFullName(cursor.getString(cursor.getColumnIndex(MEMBER_FULLNAME)));
             member.setFatherName(cursor.getString(cursor.getColumnIndex(MEMBER_FATHER_NAME)));
             member.setAge((cursor.getInt(cursor.getColumnIndex(MEMBER_AGE))));
@@ -85,12 +82,14 @@ public class CRUDMember {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()){
             Member member = new Member();
-            member.setMemberID(cursor.getString(cursor.getColumnIndex(MEMBER_ID)));
+            member.setMobileNo(cursor.getString(cursor.getColumnIndex(MEMBER_MOBILE)));
             member.setFullName(cursor.getString(cursor.getColumnIndex(MEMBER_FULLNAME)));
             member.setFatherName(cursor.getString(cursor.getColumnIndex(MEMBER_FATHER_NAME)));
             member.setAge(cursor.getInt(cursor.getColumnIndex(MEMBER_AGE)));
             members.add(member);
             Log.v("-CRUDMember-", cursor.getString(cursor.getColumnIndex(MEMBER_FULLNAME)));
+            Log.v("-CRUDMember-", cursor.getString(cursor.getColumnIndex(MEMBER_MOBILE)));
+            Log.v("-CRUDMember-", String.valueOf(cursor.getInt(cursor.getColumnIndex(MEMBER_AGE))));
             cursor.moveToNext();
         }
         cursor.close();

@@ -22,7 +22,7 @@ public class MemberListAdapter extends ArrayAdapter<Member> {
     }
 
     private static class ViewHolder{
-        TextView tvRowMemberFullName, tvRowMemberFatherName, tvRowMemberID, tvRowMemberAge;
+        TextView tvRowMemberFullName, tvRowMemberFatherName, tvRowMemberMobileNo, tvRowMemberAge;
     }
 
     @Override
@@ -34,14 +34,14 @@ public class MemberListAdapter extends ArrayAdapter<Member> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_member_list, parent, false);
-            viewHolder.tvRowMemberID = (TextView) convertView.findViewById(R.id.tvRowMemberID);
+            viewHolder.tvRowMemberMobileNo = (TextView) convertView.findViewById(R.id.tvRowMemberMobileNo);
             viewHolder.tvRowMemberFatherName = (TextView) convertView.findViewById(R.id.tvRowMemberFatherName);
             viewHolder.tvRowMemberFullName = (TextView) convertView.findViewById(R.id.tvRowMemberFullName);
             viewHolder.tvRowMemberAge = (TextView) convertView.findViewById(R.id.tvRowMemberAge);
             convertView.setTag(viewHolder);
         }else viewHolder = (ViewHolder) convertView.getTag();
 
-        viewHolder.tvRowMemberID.setText(member.getMemberID());
+        viewHolder.tvRowMemberMobileNo.setText(member.getMemberID());
         viewHolder.tvRowMemberFullName.setText(member.getFullName());
         viewHolder.tvRowMemberFatherName.setText(member.getFatherName());
         viewHolder.tvRowMemberAge.setText(String.valueOf(member.getAge()));

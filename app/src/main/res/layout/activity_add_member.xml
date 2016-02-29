@@ -14,11 +14,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/btnAddMember"
             android:text="add member" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnReadMembers"
-            android:text="read members" />
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"

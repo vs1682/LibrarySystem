@@ -3,6 +3,7 @@ package com.inatreo.testing.librarysystem.utils;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +20,7 @@ public class ExportImportDB {
     private static final String dbFolderPath = "/data/data/com.inatreo.testing.librarysystem/databases";
     private static final String backupDbFolderPath = Environment.getExternalStorageDirectory() + "/LibrarySystemBackup";
 
-    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
     static Date date = new Date();
 
     private static boolean isDbPresent(){
@@ -52,7 +53,7 @@ public class ExportImportDB {
                         return exportSuccessfull;
                 }
                 File dbFile = new File(dbFolderPath + "/library_system.db");
-                File backupDbFile = new File(backupDbFolderPath + "/library_system" + dateFormat.format(date) + ".db");
+                File backupDbFile = new File(backupDbFolderPath + "/library_system_" + dateFormat.format(date) + ".db");
                 if (isDbPresent()){
                     FileChannel src = new FileInputStream(dbFile).getChannel();
                     FileChannel dst = new FileOutputStream(backupDbFile).getChannel();
@@ -98,6 +99,18 @@ public class ExportImportDB {
             Log.v("-EIDB-",file);
         }
         return backupDbFolder.list();
+    }
+
+    public static void deleteOldestFile(){
+        File backupDbFolder = new File(backupDbFolderPath);
+        String[] dbFiles = backupDbFolder.list();
+        Log.v("-EIDB-", dbFiles[0]);
+        if (dbFiles.length > 4){
+            File oldestFile = new File(backupDbFolderPath + "/" + dbFiles[0]);
+            Log.v("-EIDB-", backupDbFolderPath + "/" + dbFiles[0]);
+            if(oldestFile.delete())
+                Log.v("-EIDB-", "deleted");
+        }
     }
     /*public static int exportDB() throws IOException{
         if (Environment.getExternalStorageDirectory().canWrite()){

@@ -31,7 +31,7 @@ public class MemberListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Member member = (Member) parent.getItemAtPosition(position);
                 Intent intent = new Intent(MemberListActivity.this, MemberDetailsActivity.class);
-                intent.putExtra("MEMBER_ID", member.getMemberID());
+                intent.putExtra("MEMBER_ID", member.getMobileNo());
                 Log.v("-MLA-", member.getFullName());
                 startActivity(intent);
             }

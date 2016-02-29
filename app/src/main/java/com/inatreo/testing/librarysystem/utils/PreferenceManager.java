@@ -26,6 +26,12 @@ public class PreferenceManager {
                 .apply();
     }
 
+    public void putBoolean(String key, boolean value){
+        mSharedPreferences.edit()
+                .putBoolean(key, value)
+                .apply();
+    }
+
     public String getString(String key){
         return mSharedPreferences.getString(key, " ");
     }

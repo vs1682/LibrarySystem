@@ -1,6 +1,7 @@
 package com.inatreo.testing.librarysystem.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +43,8 @@ public class MemberDetailsActivity extends NavDrawerActivity {
         }
     }
 
-    private void showMemberDetails(String memberID) {
-        Member member = CRUDMember.getInstance(getApplicationContext()).getMemberDetails(Integer.parseInt(memberID));
+    private void showMemberDetails(String mobileNo) {
+        Member member = CRUDMember.getInstance(getApplicationContext()).getMemberDetails(mobileNo);
         mTvMemberID.setText(member.getMemberID());
         mTvMemberFullName.setText(member.getFullName());
         mTvMemberFatherName.setText(member.getFatherName());
@@ -51,5 +52,6 @@ public class MemberDetailsActivity extends NavDrawerActivity {
         mTvMemberLevel.setText(member.getLevel());
         mTvMemberMobile.setText(member.getMobileNo());
         mTvMemberAddress.setText(member.getAddress());
+        //Log.v("-MDA-",member.getFullName());
     }
 }

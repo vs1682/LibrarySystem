@@ -1,5 +1,8 @@
 package com.inatreo.testing.librarysystem.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,19 +16,32 @@ import com.inatreo.testing.librarysystem.R;
 import com.inatreo.testing.librarysystem.database.CRUDAdmin;
 import com.inatreo.testing.librarysystem.database.DBManager;
 import com.inatreo.testing.librarysystem.models.Admin;
+import com.inatreo.testing.librarysystem.services.ScheduledBackup;
+import com.inatreo.testing.librarysystem.utils.ExportImportDB;
+import com.inatreo.testing.librarysystem.utils.PreferenceManager;
 import com.mikepenz.materialdrawer.holder.StringHolder;
+
+import java.util.Calendar;
 
 /**
  * Created by vishal on 1/26/2016.
  */
 public class CreateMasterOrAdminActivity extends NavDrawerActivity {
+
     private EditText mEtFirstName, mEtLastName, mEtMobile, mEtAdminUsername, mEtAdminPassword;
     private Spinner mSpinner;
     private TextView mTvLogin;
+    private static final String IS_IT_JUST_INSTALLED = "isItJustInstalled";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_master_or_admin);
+
+        if (!PreferenceManager.getInstance(getApplicationContext()).contains(IS_IT_JUST_INSTALLED)){
+            PreferenceManager.getInstance(getApplicationContext()).putBoolean(IS_IT_JUST_INSTALLED, true);
+            startBackupService();
+        }
 
         mEtFirstName = (EditText)findViewById(R.id.etFirstName);
         mEtLastName = (EditText)findViewById(R.id.etLastName);
@@ -73,5 +89,19 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void startBackupService() {
+        ExportImportDB.deleteOldestFile();
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(CreateMasterOrAdminActivity.this, ScheduledBackup.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 4);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }

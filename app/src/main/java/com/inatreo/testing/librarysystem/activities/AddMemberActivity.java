@@ -25,7 +25,6 @@ public class AddMemberActivity extends AppCompatActivity {
         final Spinner spinnerMemberLevel;
 
         btnAddMember = (Button)findViewById(R.id.btnAddMember);
-        btnReadMembers = (Button)findViewById(R.id.btnReadMembers);
 
         etMemberName = (EditText)findViewById(R.id.etMemberName);
         etMemberFatherName = (EditText)findViewById(R.id.etMemberFatherName);
@@ -53,11 +52,5 @@ public class AddMemberActivity extends AppCompatActivity {
             }
         });
 
-        btnReadMembers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CRUDMember.getInstance(getApplicationContext()).getMemberDetails(1);
-            }
-        });
     }
 }

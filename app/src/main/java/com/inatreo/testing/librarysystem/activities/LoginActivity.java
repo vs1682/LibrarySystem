@@ -21,7 +21,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         checkIfAlreadyLoggedIn();
+
         final EditText etUserName, etPassword;
         TextView tvCreateAccount = (TextView) findViewById(R.id.tvCreateAccount);
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -54,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         if (PreferenceManager.getInstance(getApplicationContext()).contains(USERNAME)){
             Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 }
