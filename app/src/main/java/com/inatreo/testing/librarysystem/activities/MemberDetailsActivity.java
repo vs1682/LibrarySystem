@@ -32,11 +32,11 @@ public class MemberDetailsActivity extends NavDrawerActivity {
             if (bundle == null){
                 Toast.makeText(this, "some error, please try again", Toast.LENGTH_SHORT).show();
             }else {
-                memberID = bundle.getString("MEMBER_ID");
+                memberID = bundle.getString("MOBILE_NO");
                 showMemberDetails(memberID);
             }
         }else {
-            memberID = savedInstanceState.getSerializable("MEMBER_ID").toString();
+            memberID = savedInstanceState.getSerializable("MOBILE_NO").toString();
             if (!memberID.isEmpty()){
                 showMemberDetails(memberID);
             }

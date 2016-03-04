@@ -31,16 +31,6 @@ public class ExportImportDB {
         return false;
     }
 
-/*    public static boolean isBackupPresent(){
-        File backupFolder = new File(backupDbFolderPath);
-        if (backupFolder.isDirectory()){
-            if (backupFolder.list().length == 0){
-                return true;
-            }
-        }
-        return false;
-    }*/
-
 
     public static int exportDB() throws IOException{
         int exportSuccessfull = 0;
@@ -101,73 +91,27 @@ public class ExportImportDB {
         return backupDbFolder.list();
     }
 
-    public static void deleteOldestFile(){
+    public static void deleteOldestFile() {
         File backupDbFolder = new File(backupDbFolderPath);
         String[] dbFiles = backupDbFolder.list();
-        Log.v("-EIDB-", dbFiles[0]);
-        if (dbFiles.length > 4){
-            File oldestFile = new File(backupDbFolderPath + "/" + dbFiles[0]);
-            Log.v("-EIDB-", backupDbFolderPath + "/" + dbFiles[0]);
-            if(oldestFile.delete())
+        /*for (String file : dbFiles) {
+            Log.v("-EIDB-", file);
+        }*/
+        String targetFile = "library_system_" + dateFormat.format(date) + ".db";
+        for (int i=0; i<dbFiles.length; i++){
+            Log.v(String.valueOf("-EIDB-:" + i) , dbFiles[i]);
+
+            if (targetFile.compareTo(dbFiles[i]) > 0){
+                targetFile = dbFiles[i];
+            }
+        }
+
+        Log.v("-EIDB-", targetFile);
+        if (dbFiles.length > 4) {
+            File oldestFile = new File(backupDbFolderPath + "/" + targetFile);
+            Log.v("-EIDB-", backupDbFolderPath + "/" + targetFile);
+            if (oldestFile.delete())
                 Log.v("-EIDB-", "deleted");
         }
     }
-    /*public static int exportDB() throws IOException{
-        if (Environment.getExternalStorageDirectory().canWrite()){
-            File backupDBFolder = new File(backupDbDirectoryPath);
-            if (!backupDBFolder.exists()){
-                backupDBFolder.mkdir();
-            }
-            File dbFile = new File(dbFolderPath+"/library_system.db");
-            if (!isBackupPresent()){
-                (new File(backupDbDirectoryPath+"/library_system.db")).createNewFile();
-            }
-            if (isDbPresent()){
-                FileChannel src = new FileInputStream(dbFile).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-                return 1;
-            }else return 0;
-        }else return 0;
-    }
-
-    public static int importDB(Context context) throws IOException{
-        if (!isDbPresent()){
-            Log.v("-EIDB-","present");
-            File dbFolder = new File(dbFolderPath);
-            if (!dbFolder.exists()){
-                dbFolder.mkdir();
-            }
-            File backupDB = new File(backupDbPath);
-            if (backupDB.exists()){
-                File newDbFile = new File(dbFolder.getAbsolutePath(), "library_system.db");
-                FileChannel src = new FileInputStream(backupDB).getChannel();
-                FileChannel dst = new FileOutputStream(newDbFile).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-                return 1;
-            }else return 0;
-        }else return 0;
-    }
-
-    public static boolean isBackupPresent(){
-        File backupFolder = new File(backupDbDirectoryPath);
-        if (backupFolder.isDirectory()){
-            if (backupFolder.list().length == 0){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isDbPresent(){
-        File dbFile = new File(dbFolderPath+"/library_system.db");
-        if (dbFile.exists()){
-            return true;
-        }
-        return false;
-    }*/
 }

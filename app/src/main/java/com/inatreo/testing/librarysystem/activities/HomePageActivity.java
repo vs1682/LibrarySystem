@@ -16,6 +16,7 @@ import com.inatreo.testing.librarysystem.database.CRUDMember;
 import com.inatreo.testing.librarysystem.interfaces.SelectBackupInterface;
 import com.inatreo.testing.librarysystem.models.Book;
 import com.inatreo.testing.librarysystem.utils.ExportImportDB;
+import com.inatreo.testing.librarysystem.utils.PreferenceManager;
 
 import java.io.IOException;
 
@@ -37,14 +38,19 @@ public class HomePageActivity extends NavDrawerActivity implements SelectBackupI
         btnUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CRUDMember.getInstance(getApplicationContext()).getMemberDetails((etSearch.getText().toString()));
+                if (CRUDMember.getInstance(getApplicationContext()).isMemberPresent(etSearch.getText().toString())){
+                    Intent intent = new Intent(getBaseContext(), MemberDetailsActivity.class);
+                    intent.putExtra("MOBILE_NO", etSearch.getText().toString());
+                    startActivity(intent);
+                }else
+                    Toast.makeText(getBaseContext(), "no member with this mobile no.", Toast.LENGTH_SHORT).show();
             }
         });
         btnBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (CRUDBook.getInstance(getApplicationContext()).isBookPresent(etSearch.getText().toString())) {
-                    Log.v("-HPA-","it's working");
+                    Log.v("-HPA-", "it's working");
                     Intent intent = new Intent(getBaseContext(), BookDetailsActivity.class);
                     intent.putExtra("BOOK_ID", etSearch.getText().toString());
                     startActivity(intent);

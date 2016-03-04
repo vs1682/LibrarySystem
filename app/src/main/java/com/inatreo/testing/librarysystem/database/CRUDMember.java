@@ -53,6 +53,15 @@ public class CRUDMember {
         }).start();
     }
 
+    public boolean isMemberPresent(String mobileNo){
+        String query = "select " + MEMBER_MOBILE + " from " + TABLE_MEMBER + " where " + MEMBER_MOBILE + " = " + mobileNo;
+        SQLiteDatabase db = DBManager.getDBInstance(context);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() == 1)
+            return true;
+        else return false;
+    }
+
     public Member getMemberDetails(String mobileNo){
         Member member = new Member();
         String query = "select * from " + TABLE_MEMBER + " where " + MEMBER_MOBILE + " = " + mobileNo;
