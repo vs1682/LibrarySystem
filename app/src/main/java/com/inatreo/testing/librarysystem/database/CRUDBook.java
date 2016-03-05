@@ -115,21 +115,13 @@ public class CRUDBook{
         return books;
     }
 
-    public boolean isBookPresent(String bookID){
-        int size = 0;
+    public boolean isBookPresent(String bookID) {
         String[] columns = {BOOK_ID};
         String selction = BOOK_ID + " = ?";
         String[] selectionArgs = {bookID};
         SQLiteDatabase db = DBManager.getDBInstance(context);
         Cursor cursor = db.query(TABLE_BOOKS, columns, selction, selectionArgs, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()){
-            Log.v("-CB-","it's happening");
-            size++;
-            cursor.moveToNext();
-        }
-        cursor.close();
-        if (size == 1)
+        if (cursor.getCount() == 1)
             return true;
         else return false;
     }
