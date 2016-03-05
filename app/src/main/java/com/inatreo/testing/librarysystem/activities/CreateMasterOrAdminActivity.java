@@ -72,6 +72,9 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
                 admin.setPassword(mEtAdminPassword.getText().toString());
                 admin.setMasterOrAdmin(mSpinner.getSelectedItem().toString());
                 CRUDAdmin.getInstance(getApplicationContext()).insertAdmin(admin);
+                Intent intent = new Intent(CreateMasterOrAdminActivity.this, HomePageActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

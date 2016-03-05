@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
             BOOK_DESCRIPTION + " TEXT)";
 
     private static final String CREATE_TABLE_ADMIN_QUERY = "create table admins( admin_id INTEGER PRIMARY KEY, "+
-            " first_name TEXT, last_name TEXT, mobile_no TEXT, username TEXT, password TEXT, master_or_admin TEXT)";
+            " first_name TEXT, last_name TEXT, mobile_no TEXT, username TEXT, password TEXT, master_or_admin TEXT, is_logged_in INTEGER)";
 
     private static final String CREATE_TABLE_MEMBER_QUERY = "create table members( mobile_no TEXT PRIMARY KEY, "+
             "full_name TEXT, father_name TEXT, age INTEGER, level TEXT, address TEXT)";

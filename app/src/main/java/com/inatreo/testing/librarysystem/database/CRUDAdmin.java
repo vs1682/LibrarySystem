@@ -23,6 +23,7 @@ public class CRUDAdmin {
     private final String ADMIN_USERNAME = "username";
     private final String ADMIN_PASSWORD = "password";
     private final String ADMIN_MASTER_OR_ADMIN = "master_or_admin";
+    private final String ADMIN_IS_LOGGED_IN = "is_logged_in";
 
     private CRUDAdmin(Context context){
         this.context = context;
@@ -46,6 +47,7 @@ public class CRUDAdmin {
                 cv.put(ADMIN_USERNAME, admin.getUsername());
                 cv.put(ADMIN_PASSWORD, admin.getPassword());
                 cv.put(ADMIN_MASTER_OR_ADMIN, admin.getMasterOrAdmin());
+                cv.put(ADMIN_IS_LOGGED_IN,1);
                 db.insert(TABLE_ADMIN, null, cv);
             }
         }).start();
@@ -68,28 +70,40 @@ public class CRUDAdmin {
 
     public boolean verifyAdmin(String username, String password){
         SQLiteDatabase db = DBManager.getDBInstance(context);
-        /*String query = "select " + ADMIN_PASSWORD + " from " + TABLE_ADMIN + " where " +
-                ADMIN_USERNAME + "=" + username;*/
+
         String[] columns = {ADMIN_PASSWORD};
         String selection = ADMIN_USERNAME+" = ?";
         String[] selectionArgs = {username};
+
         Cursor cursor = db.query(TABLE_ADMIN, columns, selection, selectionArgs, null, null, null);
+
         cursor.moveToFirst();
+
         String passwordFromDb = cursor.getString(cursor.getColumnIndex(ADMIN_PASSWORD));
+
         if (passwordFromDb.equals(password)){
-                Log.v("-CRUDAdmin-", cursor.getString(cursor.getColumnIndex(ADMIN_PASSWORD)));
-                Log.v("-CRUDAdmin-", password);
-                Log.v("-CRUDAdmin-", "matched");
-                cursor.close();
-                return true;
-            }
-            else{
-                Log.v("-CRUDAdmin-", cursor.getString(cursor.getColumnIndex(ADMIN_PASSWORD)));
-                Log.v("-CRUDAdmin-", password);
-                Log.v("-CRUDAdmin-", "didn't match");
-                cursor.close();
-                return false;
-            }
+            Log.v("-CRUDAdmin-", cursor.getString(cursor.getColumnIndex(ADMIN_PASSWORD)));
+            Log.v("-CRUDAdmin-", password);
+            Log.v("-CRUDAdmin-", "matched");
+            cursor.close();
+            updateLoggingDetails(username, 1);
+            return true;
+        }else{
+            Log.v("-CRUDAdmin-", cursor.getString(cursor.getColumnIndex(ADMIN_PASSWORD)));
+            Log.v("-CRUDAdmin-", password);
+            Log.v("-CRUDAdmin-", "didn't match");
+            cursor.close();
+            return false;
+        }
+    }
+
+    public void updateLoggingDetails(String username, int loggedIn){
+        SQLiteDatabase db = DBManager.getDBInstance(context);
+        String whereClause = ADMIN_USERNAME + " = ?";
+        String[] whereArgs = {username};
+        ContentValues cv = new ContentValues();
+        cv.put(ADMIN_IS_LOGGED_IN, loggedIn);
+        db.update(TABLE_ADMIN, cv, whereClause, whereArgs);
     }
 
     public void deleteAdmin(String username){
