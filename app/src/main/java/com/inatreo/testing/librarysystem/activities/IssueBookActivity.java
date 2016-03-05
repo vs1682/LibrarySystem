@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.inatreo.testing.librarysystem.R;
 import com.inatreo.testing.librarysystem.database.CRUDIssueRecord;
+import com.inatreo.testing.librarysystem.database.CRUDMember;
 import com.inatreo.testing.librarysystem.models.IssueRecord;
 
 /**
@@ -38,9 +39,11 @@ public class IssueBookActivity extends NavDrawerActivity {
         btnIssueBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                issueRecord.setBookID(etIssueBook.getText().toString());
-                issueRecord.setMemberID(etIssueToMember.getText().toString());
-                CRUDIssueRecord.getInstance(getApplicationContext()).insertIssueRecord(issueRecord);
+                if (CRUDMember.getInstance(getApplicationContext()).isMemberPresent(etIssueToMember.getText().toString())){
+                    issueRecord.setBookID(etIssueBook.getText().toString());
+                    issueRecord.setMemberID(etIssueToMember.getText().toString());
+                    CRUDIssueRecord.getInstance(getApplicationContext()).insertIssueRecord(issueRecord);
+                }
             }
         });
 
