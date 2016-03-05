@@ -92,7 +92,6 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
     }
 
     private void startBackupService() {
-        ExportImportDB.deleteOldestFile();
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(CreateMasterOrAdminActivity.this, ScheduledBackup.class);

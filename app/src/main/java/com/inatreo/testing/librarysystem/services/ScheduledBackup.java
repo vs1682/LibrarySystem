@@ -20,6 +20,7 @@ public class ScheduledBackup extends BroadcastReceiver {
         Log.v("-SB-", "it's backing up in background");
         try{
             ExportImportDB.exportDB();
+            ExportImportDB.deleteOldestFile();
         }catch (IOException e){
             e.printStackTrace();
         }

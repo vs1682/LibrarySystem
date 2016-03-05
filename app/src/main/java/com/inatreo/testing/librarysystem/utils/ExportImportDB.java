@@ -91,12 +91,10 @@ public class ExportImportDB {
         return backupDbFolder.list();
     }
 
-    public static void deleteOldestFile() {
+    public static void deleteOldestFile() throws IOException{
         File backupDbFolder = new File(backupDbFolderPath);
         String[] dbFiles = backupDbFolder.list();
-        /*for (String file : dbFiles) {
-            Log.v("-EIDB-", file);
-        }*/
+
         String targetFile = "library_system_" + dateFormat.format(date) + ".db";
         for (int i=0; i<dbFiles.length; i++){
             Log.v(String.valueOf("-EIDB-:" + i) , dbFiles[i]);
