@@ -63,8 +63,6 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
         btnCreateAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(CreateMasterOrAdminActivity.this, HomePageActivity.class);
-                startActivity(intent);*/
                 admin.setFirstName(mEtFirstName.getText().toString());
                 admin.setLastName(mEtLastName.getText().toString());
                 admin.setMobile(mEtMobile.getText().toString());
