@@ -12,9 +12,11 @@ import android.widget.Toast;
 
 import com.inatreo.testing.librarysystem.R;
 import com.inatreo.testing.librarysystem.adapters.MemberListAdapter;
+import com.inatreo.testing.librarysystem.database.CRUDAdmin;
 import com.inatreo.testing.librarysystem.database.CRUDBook;
 import com.inatreo.testing.librarysystem.database.DBManager;
 import com.inatreo.testing.librarysystem.utils.ExportImportDB;
+import com.inatreo.testing.librarysystem.utils.PreferenceManager;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -58,7 +60,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withName("OLDEST").withIdentifier(4),
                         new PrimaryDrawerItem().withName("ADD MEMBER").withIdentifier(5),
                         new PrimaryDrawerItem().withName("ADD BOOK").withIdentifier(6),
-                        new PrimaryDrawerItem().withName("LOG OUT")
+                        new PrimaryDrawerItem().withName("LOG OUT").withIdentifier(9)
 
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -70,7 +72,7 @@ public class NavDrawerActivity extends AppCompatActivity {
                                                                    int i = ExportImportDB.exportDB();
                                                                    if (i == 1) {
                                                                        Toast.makeText(getBaseContext(), "export successful!!", Toast.LENGTH_SHORT).show();
-                                                                   }else
+                                                                   } else
                                                                        Toast.makeText(getBaseContext(), "export unsuccessful!!", Toast.LENGTH_SHORT).show();
                                                                } catch (IOException e) {
                                                                    e.printStackTrace();
@@ -83,10 +85,11 @@ public class NavDrawerActivity extends AppCompatActivity {
                                                                    Toast.makeText(getBaseContext(), "not present", Toast.LENGTH_SHORT).show();
                                                                break;*/
                                                            case 4:
-                                                               //CRUDBook.getInstance(getApplicationContext()).getBookDetails();
-                                                               /*Intent intentHome = new Intent(NavDrawerActivity.this, HomePageActivity.class);
-                                                               startActivity(intentHome);*/
-                                                               ExportImportDB.deleteOldestFile();
+                                                               try {
+                                                                   ExportImportDB.deleteOldestFile();
+                                                               } catch (IOException e) {
+                                                                   e.printStackTrace();
+                                                               }
                                                                break;
                                                            case 5:
                                                                Intent intent = new Intent(NavDrawerActivity.this, AddMemberActivity.class);
@@ -103,6 +106,12 @@ public class NavDrawerActivity extends AppCompatActivity {
                                                            case 8:
                                                                Intent intentMemberList = new Intent(NavDrawerActivity.this, MemberListActivity.class);
                                                                startActivity(intentMemberList);
+                                                               break;
+                                                           case 9:
+                                                               String username = PreferenceManager.getInstance(getApplicationContext()).getString("username");
+                                                               CRUDAdmin.getInstance(getApplicationContext()).updateLoggingDetails(username, 0);
+                                                               PreferenceManager.getInstance(getApplicationContext()).remove("username");
+                                                               PreferenceManager.getInstance(getApplicationContext()).remove("password");
                                                                break;
                                                        }
                                                        return false;

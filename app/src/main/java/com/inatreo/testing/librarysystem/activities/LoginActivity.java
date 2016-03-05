@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 boolean isVerified = CRUDAdmin.getInstance(getApplicationContext()).verifyAdmin(username, password);
                 if (isVerified){
+                    CRUDAdmin.getInstance(getApplicationContext()).updateLoggingDetails(username, 1);
                     PreferenceManager.getInstance(getApplicationContext()).putString(USERNAME, username);
                     PreferenceManager.getInstance(getApplicationContext()).putString(PASSWORD, password);
                     Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);

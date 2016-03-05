@@ -50,7 +50,7 @@ public class PreferenceManager {
                 .apply();
     }
 
-    public void clearEverything(String key){
+    public void clearEverything(){
         mSharedPreferences.edit()
                 .clear()
                 .apply();
