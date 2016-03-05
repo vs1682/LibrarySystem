@@ -31,17 +31,11 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
     private EditText mEtFirstName, mEtLastName, mEtMobile, mEtAdminUsername, mEtAdminPassword;
     private Spinner mSpinner;
     private TextView mTvLogin;
-    private static final String IS_IT_JUST_INSTALLED = "isItJustInstalled";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_master_or_admin);
-
-        if (!PreferenceManager.getInstance(getApplicationContext()).contains(IS_IT_JUST_INSTALLED)){
-            PreferenceManager.getInstance(getApplicationContext()).putBoolean(IS_IT_JUST_INSTALLED, true);
-            startBackupService();
-        }
 
         mEtFirstName = (EditText)findViewById(R.id.etFirstName);
         mEtLastName = (EditText)findViewById(R.id.etLastName);
@@ -92,16 +86,5 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
         });
     }
 
-    private void startBackupService() {
 
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(CreateMasterOrAdminActivity.this, ScheduledBackup.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 4);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
 }
