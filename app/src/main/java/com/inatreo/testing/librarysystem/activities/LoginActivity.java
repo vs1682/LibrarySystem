@@ -16,6 +16,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private EditText etUserName, etPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
 
         checkIfAlreadyLoggedIn();
 
-        final EditText etUserName, etPassword;
         TextView tvCreateAccount = (TextView) findViewById(R.id.tvCreateAccount);
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
         etUserName = (EditText)findViewById(R.id.etUsername);
@@ -35,9 +36,7 @@ public class LoginActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 boolean isVerified = CRUDAdmin.getInstance(getApplicationContext()).verifyAdmin(username, password);
                 if (isVerified){
-                    CRUDAdmin.getInstance(getApplicationContext()).updateLoggingDetails(username, 1);
-                    PreferenceManager.getInstance(getApplicationContext()).putString(USERNAME, username);
-                    PreferenceManager.getInstance(getApplicationContext()).putString(PASSWORD, password);
+                    updateLoggingDetails(username, password);
                     Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
                     startActivity(intent);
                 }
@@ -50,6 +49,12 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void updateLoggingDetails(String username, String password) {
+        CRUDAdmin.getInstance(getApplicationContext()).updateLoggingDetails(username, 1);
+        PreferenceManager.getInstance(getApplicationContext()).putString(USERNAME, username);
+        PreferenceManager.getInstance(getApplicationContext()).putString(PASSWORD, password);
     }
 
     private void checkIfAlreadyLoggedIn() {

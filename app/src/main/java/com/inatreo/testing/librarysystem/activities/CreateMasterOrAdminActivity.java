@@ -32,6 +32,9 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
     private Spinner mSpinner;
     private TextView mTvLogin;
 
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,11 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
                 admin.setUsername(mEtAdminUsername.getText().toString());
                 admin.setPassword(mEtAdminPassword.getText().toString());
                 admin.setMasterOrAdmin(mSpinner.getSelectedItem().toString());
+
                 CRUDAdmin.getInstance(getApplicationContext()).insertAdmin(admin);
+
+                updateLoggingDetails(admin.getUsername(), admin.getPassword());
+
                 Intent intent = new Intent(CreateMasterOrAdminActivity.this, HomePageActivity.class);
                 startActivity(intent);
                 finish();
@@ -84,6 +91,11 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void updateLoggingDetails(String username, String password) {
+        PreferenceManager.getInstance(getApplicationContext()).putString(USERNAME, username);
+        PreferenceManager.getInstance(getApplicationContext()).putString(PASSWORD, password);
     }
 
 

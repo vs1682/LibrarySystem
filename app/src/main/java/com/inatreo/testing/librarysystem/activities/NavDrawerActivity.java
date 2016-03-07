@@ -78,12 +78,12 @@ public class NavDrawerActivity extends AppCompatActivity {
                                                                    e.printStackTrace();
                                                                }
                                                                break;
-                                                           /*case 3:
-                                                               if (ExportImportDB.isDbPresent())
+                                                           case 3:
+                                                               /*if (ExportImportDB.isDbPresent())
                                                                    Toast.makeText(getBaseContext(), "present", Toast.LENGTH_SHORT).show();
                                                                else
-                                                                   Toast.makeText(getBaseContext(), "not present", Toast.LENGTH_SHORT).show();
-                                                               break;*/
+                                                                   Toast.makeText(getBaseContext(), "not present", Toast.LENGTH_SHORT).show();*/
+                                                               break;
                                                            case 4:
                                                                try {
                                                                    ExportImportDB.deleteOldestFile();
