@@ -3,7 +3,6 @@ package com.inatreo.testing.librarysystem.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -11,10 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.inatreo.testing.librarysystem.R;
-import com.inatreo.testing.librarysystem.adapters.MemberListAdapter;
 import com.inatreo.testing.librarysystem.database.CRUDAdmin;
-import com.inatreo.testing.librarysystem.database.CRUDBook;
-import com.inatreo.testing.librarysystem.database.DBManager;
 import com.inatreo.testing.librarysystem.utils.ExportImportDB;
 import com.inatreo.testing.librarysystem.utils.PreferenceManager;
 import com.mikepenz.materialdrawer.Drawer;
@@ -52,8 +48,8 @@ public class NavDrawerActivity extends AppCompatActivity {
                 .withToolbar(tbGlobal)
                 .withActivity(this)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("USERS").withIdentifier(8),
                         new PrimaryDrawerItem().withName("BOOKS").withIdentifier(7),
+                        new PrimaryDrawerItem().withName("USERS").withIdentifier(8),
                         new PrimaryDrawerItem().withName("EXPORT BACKUP").withIdentifier(1),
                         new PrimaryDrawerItem().withName("IMPORT BACKUP").withIdentifier(2),
                         new PrimaryDrawerItem().withName("CHECK IF IMPORTED").withIdentifier(3),
@@ -111,7 +107,11 @@ public class NavDrawerActivity extends AppCompatActivity {
                                                                String username = PreferenceManager.getInstance(getApplicationContext()).getString("username");
                                                                CRUDAdmin.getInstance(getApplicationContext()).updateLoggingDetails(username, 0);
                                                                PreferenceManager.getInstance(getApplicationContext()).remove("username");
-                                                               PreferenceManager.getInstance(getApplicationContext()).remove("password");
+                                                               /*PreferenceManager.getInstance(getApplicationContext()).remove("password");*/
+                                                               PreferenceManager.getInstance(getApplicationContext()).remove("is_it_master");
+                                                               Intent loginIntent = new Intent(NavDrawerActivity.this, LoginActivity.class);
+                                                               startActivity(loginIntent);
+                                                               finish();
                                                                break;
                                                        }
                                                        return false;
@@ -120,4 +120,5 @@ public class NavDrawerActivity extends AppCompatActivity {
                 )
                 .build();
     }
+
 }

@@ -16,6 +16,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private static final String IS_IT_MASTER = "is_it_master";
     private EditText etUserName, etPassword;
 
     @Override
@@ -29,16 +30,26 @@ public class LoginActivity extends AppCompatActivity {
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
         etUserName = (EditText)findViewById(R.id.etUsername);
         etPassword = (EditText)findViewById(R.id.etPassword);
+
+        if (CRUDAdmin.getInstance(getApplicationContext()).isMasterPresent()){
+            tvCreateAccount.setVisibility(View.INVISIBLE);
+        }
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = etUserName.getText().toString();
                 String password = etPassword.getText().toString();
-                boolean isVerified = CRUDAdmin.getInstance(getApplicationContext()).verifyAdmin(username, password);
-                if (isVerified){
-                    updateLoggingDetails(username, password);
+
+                int isVerified = CRUDAdmin.getInstance(getApplicationContext()).verifyAdmin(username, password);
+
+                if (isVerified == 1 || isVerified == 2){
+                    if (isVerified == 1){
+                        PreferenceManager.getInstance(getApplicationContext()).putString(IS_IT_MASTER, "master");
+                    }
+                    updateLoggingDetails(username);
                     Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -47,14 +58,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, CreateMasterOrAdminActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
 
-    private void updateLoggingDetails(String username, String password) {
+    private void updateLoggingDetails(String username) {
         CRUDAdmin.getInstance(getApplicationContext()).updateLoggingDetails(username, 1);
         PreferenceManager.getInstance(getApplicationContext()).putString(USERNAME, username);
-        PreferenceManager.getInstance(getApplicationContext()).putString(PASSWORD, password);
+        /*PreferenceManager.getInstance(getApplicationContext()).putString(PASSWORD, password);*/
     }
 
     private void checkIfAlreadyLoggedIn() {

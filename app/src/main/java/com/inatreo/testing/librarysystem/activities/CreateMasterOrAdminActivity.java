@@ -13,8 +13,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.inatreo.testing.librarysystem.R;
+import com.inatreo.testing.librarysystem.activities.fragments.CreatingMasterWarningDialog;
 import com.inatreo.testing.librarysystem.database.CRUDAdmin;
 import com.inatreo.testing.librarysystem.database.DBManager;
+import com.inatreo.testing.librarysystem.interfaces.CreateNewMasterInterface;
 import com.inatreo.testing.librarysystem.models.Admin;
 import com.inatreo.testing.librarysystem.services.ScheduledBackup;
 import com.inatreo.testing.librarysystem.utils.ExportImportDB;
@@ -26,14 +28,16 @@ import java.util.Calendar;
 /**
  * Created by vishal on 1/26/2016.
  */
-public class CreateMasterOrAdminActivity extends NavDrawerActivity {
+public class CreateMasterOrAdminActivity extends NavDrawerActivity implements CreateNewMasterInterface{
 
     private EditText mEtFirstName, mEtLastName, mEtMobile, mEtAdminUsername, mEtAdminPassword;
     private Spinner mSpinner;
     private TextView mTvLogin;
-
+    private Admin admin;
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private static final String IS_IT_MASTER = "is_it_master";
+    private static final String IS_IT_JUST_INSTALLED = "is_it_just_installed";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +53,21 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
         mTvLogin = (TextView)findViewById(R.id.tvLogin);
 
         mSpinner = (Spinner)findViewById(R.id.spinnerMasterOrAdmin);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.masterOrAdmin, android.R.layout.simple_spinner_item);
+
+        ArrayAdapter<CharSequence> adapter;
+        if (PreferenceManager.getInstance(getApplicationContext()).contains(IS_IT_JUST_INSTALLED)){
+            adapter = ArrayAdapter.createFromResource(this, R.array.masterOrAdmin, android.R.layout.simple_spinner_item);
+        }else{
+            adapter = ArrayAdapter.createFromResource(this, R.array.master, android.R.layout.simple_spinner_item);
+        }
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
 
         Button btnCreateAdmin = (Button) findViewById(R.id.btnCreateAdmin);
         Button btnReadAdmins = (Button) findViewById(R.id.btnReadAdmins);
 
-        final Admin admin = new Admin();
+        admin = new Admin();
         btnCreateAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,13 +78,23 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
                 admin.setPassword(mEtAdminPassword.getText().toString());
                 admin.setMasterOrAdmin(mSpinner.getSelectedItem().toString());
 
-                CRUDAdmin.getInstance(getApplicationContext()).insertAdmin(admin);
 
-                updateLoggingDetails(admin.getUsername(), admin.getPassword());
 
-                Intent intent = new Intent(CreateMasterOrAdminActivity.this, HomePageActivity.class);
-                startActivity(intent);
-                finish();
+                if (isMasterLoggedIn() && admin.getMasterOrAdmin().equals("Admin")){
+                    CRUDAdmin.getInstance(getApplicationContext()).insertAdmin(admin, 0);
+                }
+                if (isMasterLoggedIn() && admin.getMasterOrAdmin().equals("Master")){
+                    CreatingMasterWarningDialog dialog = new CreatingMasterWarningDialog();
+                    dialog.show(getFragmentManager(), "createNewMaster");
+                }
+                if (admin.getMasterOrAdmin().equals("Master")){
+                    CRUDAdmin.getInstance(getApplicationContext()).insertAdmin(admin, 1);
+                    PreferenceManager.getInstance(getApplicationContext()).putString(IS_IT_MASTER, "master");
+                    updateLoggingDetails(admin.getUsername(), admin.getPassword());
+                    Intent intent = new Intent(CreateMasterOrAdminActivity.this, HomePageActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
@@ -95,8 +116,22 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity {
 
     private void updateLoggingDetails(String username, String password) {
         PreferenceManager.getInstance(getApplicationContext()).putString(USERNAME, username);
-        PreferenceManager.getInstance(getApplicationContext()).putString(PASSWORD, password);
+        /*PreferenceManager.getInstance(getApplicationContext()).putString(PASSWORD, password);*/
     }
 
+    private boolean isMasterLoggedIn(){
+        return PreferenceManager.getInstance(getApplicationContext()).contains(IS_IT_MASTER);
+    }
 
+    @Override
+    public void createNewMaster() {
+
+        PreferenceManager.getInstance(getApplicationContext()).remove("username");
+        /*PreferenceManager.getInstance(getApplicationContext()).remove("password");*/
+        PreferenceManager.getInstance(getApplicationContext()).remove("is_it_master");
+        CRUDAdmin.getInstance(getApplicationContext()).insertAdmin(admin, 0);
+        Intent loginIntent = new Intent(CreateMasterOrAdminActivity.this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
+    }
 }

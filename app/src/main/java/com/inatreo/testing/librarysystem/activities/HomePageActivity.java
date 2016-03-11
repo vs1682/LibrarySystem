@@ -21,6 +21,9 @@ import com.inatreo.testing.librarysystem.models.Book;
 import com.inatreo.testing.librarysystem.services.ScheduledBackup;
 import com.inatreo.testing.librarysystem.utils.ExportImportDB;
 import com.inatreo.testing.librarysystem.utils.PreferenceManager;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -32,6 +35,7 @@ public class HomePageActivity extends NavDrawerActivity implements SelectBackupI
   
     private static final String SHOWING_IMPORT_BACKUP_DIALOG_FOR_FIRST_TIME = "showingImportBackupDialogForFirstTime";
     private static final String HAS_BACKUP_SERVICE_STARTED = "hasBackupServiceStarted";
+    private static final String IS_IT_MASTER = "is_it_master";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,20 @@ public class HomePageActivity extends NavDrawerActivity implements SelectBackupI
         if (!PreferenceManager.getInstance(getApplicationContext()).contains(HAS_BACKUP_SERVICE_STARTED)){
             PreferenceManager.getInstance(getApplicationContext()).putBoolean(HAS_BACKUP_SERVICE_STARTED, true);
             startBackupService();
+        }
+
+        if (PreferenceManager.getInstance(getApplicationContext()).contains(IS_IT_MASTER)){
+            PrimaryDrawerItem drawerItem = new PrimaryDrawerItem()
+                    .withName("ADD ADMIN")
+                    .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                        @Override
+                        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                            Intent intent = new Intent(HomePageActivity.this, CreateMasterOrAdminActivity.class);
+                            startActivity(intent);
+                            return false;
+                        }
+                    });
+            drawer.addItemAtPosition(drawerItem, 2);
         }
       
         final EditText etSearch = (EditText)findViewById(R.id.etSearch);

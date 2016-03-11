@@ -35,7 +35,7 @@ public class CRUDAdmin {
         return crudAdmin;
     }
 
-    public void insertAdmin(final Admin admin){
+    public void insertAdmin(final Admin admin, final int isLoggedIn){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -47,7 +47,7 @@ public class CRUDAdmin {
                 cv.put(ADMIN_USERNAME, admin.getUsername());
                 cv.put(ADMIN_PASSWORD, admin.getPassword());
                 cv.put(ADMIN_MASTER_OR_ADMIN, admin.getMasterOrAdmin());
-                cv.put(ADMIN_IS_LOGGED_IN,1);
+                cv.put(ADMIN_IS_LOGGED_IN,isLoggedIn);
                 db.insert(TABLE_ADMIN, null, cv);
             }
         }).start();
@@ -68,10 +68,13 @@ public class CRUDAdmin {
         cursor.close();
     }
 
-    public boolean verifyAdmin(String username, String password){
+    public int verifyAdmin(String username, String password){
         SQLiteDatabase db = DBManager.getDBInstance(context);
 
-        String[] columns = {ADMIN_PASSWORD};
+        final int MASTER = 1;
+        final int ADMIN = 2;
+
+        String[] columns = {ADMIN_PASSWORD, ADMIN_MASTER_OR_ADMIN};
         String selection = ADMIN_USERNAME+" = ?";
         String[] selectionArgs = {username};
 
@@ -80,6 +83,7 @@ public class CRUDAdmin {
         cursor.moveToFirst();
 
         String passwordFromDb = cursor.getString(cursor.getColumnIndex(ADMIN_PASSWORD));
+        String masterOrAdmin = cursor.getString(cursor.getColumnIndex(ADMIN_MASTER_OR_ADMIN));
 
         if (passwordFromDb.equals(password)){
             Log.v("-CRUDAdmin-", cursor.getString(cursor.getColumnIndex(ADMIN_PASSWORD)));
@@ -87,11 +91,29 @@ public class CRUDAdmin {
             Log.v("-CRUDAdmin-", "matched");
             cursor.close();
             updateLoggingDetails(username, 1);
-            return true;
+            if (masterOrAdmin.equals("Master"))
+                return MASTER;
+            else
+                return ADMIN;
         }else{
             Log.v("-CRUDAdmin-", cursor.getString(cursor.getColumnIndex(ADMIN_PASSWORD)));
             Log.v("-CRUDAdmin-", password);
             Log.v("-CRUDAdmin-", "didn't match");
+            cursor.close();
+            return 0;
+        }
+    }
+
+    public boolean isMasterPresent(){
+        SQLiteDatabase db = DBManager.getDBInstance(context);
+        String selection = ADMIN_MASTER_OR_ADMIN + " = ?";
+        String[] selectionArgs = {"Master"};
+        Cursor cursor = db.query(TABLE_ADMIN, null, selection, selectionArgs, null, null, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() == 1){
+            cursor.close();
+            return true;
+        }else {
             cursor.close();
             return false;
         }
