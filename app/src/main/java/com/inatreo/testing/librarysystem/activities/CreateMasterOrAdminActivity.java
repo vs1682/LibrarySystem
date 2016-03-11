@@ -54,10 +54,12 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity implements Cr
 
         mSpinner = (Spinner)findViewById(R.id.spinnerMasterOrAdmin);
 
+        //when installed, only master can be created and after master logs in, both master or admin can be created.
         ArrayAdapter<CharSequence> adapter;
         if (PreferenceManager.getInstance(getApplicationContext()).contains(IS_IT_JUST_INSTALLED)){
             adapter = ArrayAdapter.createFromResource(this, R.array.masterOrAdmin, android.R.layout.simple_spinner_item);
         }else{
+            PreferenceManager.getInstance(getApplicationContext()).putBoolean(IS_IT_JUST_INSTALLED, true);
             adapter = ArrayAdapter.createFromResource(this, R.array.master, android.R.layout.simple_spinner_item);
         }
 
@@ -79,15 +81,18 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity implements Cr
                 admin.setMasterOrAdmin(mSpinner.getSelectedItem().toString());
 
 
-
+                //when master is creating an admin profile.
                 if (isMasterLoggedIn() && admin.getMasterOrAdmin().equals("Admin")){
                     CRUDAdmin.getInstance(getApplicationContext()).insertAdmin(admin, 0);
                 }
+                //when master is creating another master. this deletes the current master account
+                //as there can be only master at a time.
                 if (isMasterLoggedIn() && admin.getMasterOrAdmin().equals("Master")){
                     CreatingMasterWarningDialog dialog = new CreatingMasterWarningDialog();
                     dialog.show(getFragmentManager(), "createNewMaster");
                 }
-                if (admin.getMasterOrAdmin().equals("Master")){
+                //when master is getting created when app is installed for the first time.
+                else if (admin.getMasterOrAdmin().equals("Master")){
                     CRUDAdmin.getInstance(getApplicationContext()).insertAdmin(admin, 1);
                     PreferenceManager.getInstance(getApplicationContext()).putString(IS_IT_MASTER, "master");
                     updateLoggingDetails(admin.getUsername(), admin.getPassword());
@@ -105,6 +110,7 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity implements Cr
             }
         });
 
+
         mTvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,19 +120,23 @@ public class CreateMasterOrAdminActivity extends NavDrawerActivity implements Cr
         });
     }
 
+    //when first master is created, the master directly logs in the details ar stored in shared prefs.
     private void updateLoggingDetails(String username, String password) {
         PreferenceManager.getInstance(getApplicationContext()).putString(USERNAME, username);
         /*PreferenceManager.getInstance(getApplicationContext()).putString(PASSWORD, password);*/
     }
 
+    //to check if master is logged in.
     private boolean isMasterLoggedIn(){
         return PreferenceManager.getInstance(getApplicationContext()).contains(IS_IT_MASTER);
     }
 
+    //to create new master delete the old master.
     @Override
     public void createNewMaster() {
 
-        PreferenceManager.getInstance(getApplicationContext()).remove("username");
+        CRUDAdmin.getInstance(getApplicationContext()).deleteAdmin(PreferenceManager.getInstance(getApplicationContext()).getString(USERNAME));
+        PreferenceManager.getInstance(getApplicationContext()).remove(USERNAME);
         /*PreferenceManager.getInstance(getApplicationContext()).remove("password");*/
         PreferenceManager.getInstance(getApplicationContext()).remove("is_it_master");
         CRUDAdmin.getInstance(getApplicationContext()).insertAdmin(admin, 0);

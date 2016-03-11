@@ -42,13 +42,15 @@ public class HomePageActivity extends NavDrawerActivity implements SelectBackupI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
+        //to check if app is just installed or used for the first time and if so start the backup service.
         if (!PreferenceManager.getInstance(getApplicationContext()).contains(HAS_BACKUP_SERVICE_STARTED)){
             PreferenceManager.getInstance(getApplicationContext()).putBoolean(HAS_BACKUP_SERVICE_STARTED, true);
             startBackupService();
         }
 
+        //if master is logged in then provide add and read admin options.
         if (PreferenceManager.getInstance(getApplicationContext()).contains(IS_IT_MASTER)){
-            PrimaryDrawerItem drawerItem = new PrimaryDrawerItem()
+            PrimaryDrawerItem drawerItem1 = new PrimaryDrawerItem()
                     .withName("ADD ADMIN")
                     .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                         @Override
@@ -58,9 +60,21 @@ public class HomePageActivity extends NavDrawerActivity implements SelectBackupI
                             return false;
                         }
                     });
-            drawer.addItemAtPosition(drawerItem, 2);
+
+            PrimaryDrawerItem drawerItem2 = new PrimaryDrawerItem()
+                    .withName("ADMINS")
+                    .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                        @Override
+                        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                            Intent intent = new Intent(HomePageActivity.this, CreateMasterOrAdminActivity.class);
+                            startActivity(intent);
+                            return false;
+                        }
+                    });
+            drawer.addItemAtPosition(drawerItem1, 2);
+            drawer.addItemAtPosition(drawerItem2, 3);
         }
-      
+
         final EditText etSearch = (EditText)findViewById(R.id.etSearch);
         Button btnUser = (Button) findViewById(R.id.btnUser);
         Button btnBook = (Button) findViewById(R.id.btnBook);
@@ -89,16 +103,20 @@ public class HomePageActivity extends NavDrawerActivity implements SelectBackupI
             }
         });
 
+        //if backup is present, showing import backup files dialog to import the data if the app is used for the first time.
         if(!PreferenceManager.getInstance(getApplicationContext()).contains(SHOWING_IMPORT_BACKUP_DIALOG_FOR_FIRST_TIME)){
-          new ImportBackupDialog().show(getFragmentManager(), "importDialog");
-          PreferenceManager.getInstance(getApplicationContext()).putBoolean(SHOWING_IMPORT_BACKUP_DIALOG_FOR_FIRST_TIME, true);
+            if (ExportImportDB.isBackupPresent()){
+                new ImportBackupDialog().show(getFragmentManager(), "importDialog");
+                PreferenceManager.getInstance(getApplicationContext()).putBoolean(SHOWING_IMPORT_BACKUP_DIALOG_FOR_FIRST_TIME, true);
+            }
         }
     }
 
+    //import the selected backup file.
     @Override
     public void selectedFile(String file) {
         Log.v("-HPA-", String.valueOf(file));
-        Toast.makeText(this, "should we import", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "importing...", Toast.LENGTH_SHORT).show();
         try{
             ExportImportDB.importDB(file);
         }catch (IOException e){
@@ -106,6 +124,8 @@ public class HomePageActivity extends NavDrawerActivity implements SelectBackupI
         }
     }
 
+    //start the backup service in background when app is used for the first time.
+    //the backup is taken everyday in the background.
     private void startBackupService() {
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);

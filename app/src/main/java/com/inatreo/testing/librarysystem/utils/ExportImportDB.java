@@ -91,6 +91,18 @@ public class ExportImportDB {
         return backupDbFolder.list();
     }
 
+    public static boolean isBackupPresent(){
+        String[] list;
+        try {
+            list = listAllBackupFiles();
+            if (list.length > 0)
+                return true;
+        }catch (IOException e){
+            e.printStackTrace();;
+        }
+        return false;
+    }
+
     public static void deleteOldestFile() throws IOException{
         File backupDbFolder = new File(backupDbFolderPath);
         String[] dbFiles = backupDbFolder.list();

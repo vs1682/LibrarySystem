@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //if already logged in then skip login page and land directly into home page.
         checkIfAlreadyLoggedIn();
 
         TextView tvCreateAccount = (TextView) findViewById(R.id.tvCreateAccount);
@@ -31,9 +32,11 @@ public class LoginActivity extends AppCompatActivity {
         etUserName = (EditText)findViewById(R.id.etUsername);
         etPassword = (EditText)findViewById(R.id.etPassword);
 
+        //when one master is created, hide the link to create another at login at login page
         if (CRUDAdmin.getInstance(getApplicationContext()).isMasterPresent()){
             tvCreateAccount.setVisibility(View.INVISIBLE);
         }
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //put admin details in shared prefs to check if already logged in.
     private void updateLoggingDetails(String username) {
         CRUDAdmin.getInstance(getApplicationContext()).updateLoggingDetails(username, 1);
         PreferenceManager.getInstance(getApplicationContext()).putString(USERNAME, username);
