@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import com.inatreo.testing.librarysystem.R;
 import com.inatreo.testing.librarysystem.database.CRUDBook;
-import com.inatreo.testing.librarysystem.database.DBManager;
 import com.inatreo.testing.librarysystem.models.Book;
 
 /**

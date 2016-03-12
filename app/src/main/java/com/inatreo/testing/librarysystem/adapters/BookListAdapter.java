@@ -11,7 +11,6 @@ import com.inatreo.testing.librarysystem.R;
 import com.inatreo.testing.librarysystem.models.Book;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by vishal on 2/11/2016.

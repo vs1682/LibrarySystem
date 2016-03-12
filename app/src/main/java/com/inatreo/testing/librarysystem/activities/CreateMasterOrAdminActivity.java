@@ -1,8 +1,6 @@
 package com.inatreo.testing.librarysystem.activities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,15 +13,10 @@ import android.widget.TextView;
 import com.inatreo.testing.librarysystem.R;
 import com.inatreo.testing.librarysystem.activities.fragments.CreatingMasterWarningDialog;
 import com.inatreo.testing.librarysystem.database.CRUDAdmin;
-import com.inatreo.testing.librarysystem.database.DBManager;
 import com.inatreo.testing.librarysystem.interfaces.CreateNewMasterInterface;
 import com.inatreo.testing.librarysystem.models.Admin;
-import com.inatreo.testing.librarysystem.services.ScheduledBackup;
-import com.inatreo.testing.librarysystem.utils.ExportImportDB;
 import com.inatreo.testing.librarysystem.utils.PreferenceManager;
-import com.mikepenz.materialdrawer.holder.StringHolder;
 
-import java.util.Calendar;
 
 /**
  * Created by vishal on 1/26/2016.
